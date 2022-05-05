@@ -1,4 +1,7 @@
-from src.engine import app
+from src import start_app
+
+app = start_app()
+
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(port=5000, debug=1)
