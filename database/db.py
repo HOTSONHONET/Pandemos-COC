@@ -19,9 +19,8 @@ def getDBObjects():
 
     return hospital_db, users_db
 
+
 # Helper function to push data of Hospitals as record in Hospital Collection
-
-
 def pushHospitalData2DB():
     hospital_db, _ = getDBObjects()
     for jfile_path in glob(f"{DATA_FOLDER}/*json"):
@@ -29,9 +28,9 @@ def pushHospitalData2DB():
             jfile_content = json.load(jfile)
             jfile.close()
         hospital_name, info = list(jfile_content.items())[0]
-        if hospital_name not in hospital_db.list_collection_names():
-            hospital_collection = hospital_db[hospital_name]
-            hospital_collection.insert_one(info)
+        # if hospital_name not in hospital_db.list_collection_names():
+        hospital_collection = hospital_db[hospital_name]
+        hospital_collection.insert_one(info)
 
 
 if __name__ == "__main__":

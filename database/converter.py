@@ -22,7 +22,7 @@
 #             except:
 #                 continue
 
-#     jFileContent = json.dumps(hospital_dict, indent=4)
-#     with open(f"database/{hospital}.json", "w") as jfile:
-#         jfile.write(jFileContent)
-#         jfile.close()
+    # jFileContent = json.dumps(hospital_dict, indent=4)
+    # with open(f"database/{hospital}.json", "w") as jfile:
+    #     jfile.write(jFileContent)
+    #     jfile.close()
