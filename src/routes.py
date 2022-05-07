@@ -12,12 +12,16 @@ hospital_db, users_db = getDBObjects()
 
 
 """
+Route: /coc
+==========
 
 From Here different Routes are defined for different API calls
 > Route for getting all hospitals names
-> Route for getting all info for the hospitals
-> Route for getting selected hospital info
-> Route for getting top 3 hospitals
+> Route for getting all info for a particular hospital
+> Route for filtering top 3 available with the particular service and is of below the provided budget
+> Route for getting all the treatments available in a hospital
+> Route for listing all the available treatments under a particular type of treatement
+> Route for fetching all the subtreatments available under a particular treatement which is of a particular type
 
 
 """
@@ -25,7 +29,7 @@ From Here different Routes are defined for different API calls
 
 # Fetch all hospital details
 @app.route("/")
-@app.route("/all")
+@app.route("/coc")
 def allHospitalNames():
     allHospitalNames = hospital_db.list_collection_names()
     to_return = {
@@ -35,7 +39,7 @@ def allHospitalNames():
 
 
 # Fetch hospital data
-@app.route("/all/<string:hospitalName>", methods=["GET"])
+@app.route("/coc/<string:hospitalName>", methods=["GET"])
 def hospitalInfo(hospitalName):
     hospitalInfo = {}
     if hospitalName in hospital_db.list_collection_names():
@@ -46,7 +50,7 @@ def hospitalInfo(hospitalName):
 
 
 # Fetch Hospital info based on budget and treatment name
-@app.route("/all/<string:treatment_name>/<int:budget>", methods=["GET"])
+@app.route("/coc/<string:treatment_name>/<int:budget>", methods=["GET"])
 def top3Hospital(treatment_name: str, budget: int):
     allHospitals = hospital_db.list_collection_names()
     top3 = []
@@ -72,3 +76,46 @@ def top3Hospital(treatment_name: str, budget: int):
             top3Hospitals[hospital_name] = hospital_cost
 
     return top3Hospitals
+
+
+# Route for fetching all the Types of Treatment available in the hospital
+@app.route("/coc/treatments/<string:hospital_name>")
+def allTreatments(hospital_name):
+    allHospitals = hospital_db.list_collection_names()
+    to_return = {}
+    if hospital_name in allHospitals:
+        for reqHospital in hospital_db[hospital_name].find():
+            for treatmentType, treatmentList in reqHospital["Types of Treatments"].items():
+                to_return[treatmentType] = list(treatmentList.keys())
+
+    return to_return
+
+
+# Route for fetching all the treatments available a particular type of treaments
+@app.route("/coc/treatments/<string:hospital_name>/<string:type_of_treatment>")
+def allTreatmentsOfAType(hospital_name, type_of_treatment):
+    allHospitals = hospital_db.list_collection_names()
+    to_return = {}
+    if hospital_name in allHospitals:
+        for reqHospital in hospital_db[hospital_name].find():
+            for treatmentType, treatmentList in reqHospital["Types of Treatments"].items():
+                if treatmentType == type_of_treatment:
+                    to_return[treatmentType] = list(treatmentList.keys())
+    return to_return
+
+
+# Route for fetching all the subtreatments available under a particular treatment which is of a particular type
+@app.route("/coc/treatments/<string:hospital_name>/<string:type_of_treatment>/<string:req_treatment_name>")
+def allSubtreatmentsUnderATreatmentOfAType(hospital_name, type_of_treatment, req_treatment_name):
+    allHospitals = hospital_db.list_collection_names()
+    to_return = {}
+    if hospital_name in allHospitals:
+        for reqHospital in hospital_db[hospital_name].find():
+            for treatmentType, treatmentList in reqHospital["Types of Treatments"].items():
+                if treatmentType == type_of_treatment:
+                    to_return[treatmentType] = {}
+                    for treatment_name, subTreatmentList in treatmentList.items():
+                        if treatment_name == req_treatment_name:
+                            to_return[treatmentType][treatment_name] = subTreatmentList
+
+    return to_return
