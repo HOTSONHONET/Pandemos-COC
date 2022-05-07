@@ -119,15 +119,3 @@ def allSubtreatmentsUnderATreatmentOfAType(hospital_name, type_of_treatment, req
                             to_return[treatmentType][treatment_name] = subTreatmentList
 
     return to_return
-
-
-"""
-Route: /cms
-===========
-> Route for registering users
-> Route for collecting EHR templates from openEHR
-> Route for downloading patient profile 
-
-
-
-"""

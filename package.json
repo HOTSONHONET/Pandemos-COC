@@ -17,7 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-flask-server": "Backend/venv38/scripts/activate && py Backend/main.py"
+    "start-flask-server": "cd .. && venv38/scripts/activate && py main.py"
   },
   "eslintConfig": {
     "extends": [
