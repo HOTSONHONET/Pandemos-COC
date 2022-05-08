@@ -13,8 +13,8 @@ function App() {
   let darkBg = "#202124";
   const [darkMode, setDarkMode] = useState(null);
   const [curStyle, setCurStyle] = useState({
-    color: "white",
-    backgroundColor: "black",
+    color: "black",
+    backgroundColor: "white",
   });
 
   const toggleDarkMode = () => {

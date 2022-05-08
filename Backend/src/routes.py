@@ -2,6 +2,7 @@ from flask import Flask, redirect, current_app as app, request, jsonify
 from .config import *
 from database.db import getDBObjects
 from pprint import pprint
+import string
 
 # Configs
 app.secret_key = SECRET_KEY
@@ -22,7 +23,7 @@ From Here different Routes are defined for different API calls
 > Route for getting all the treatments available in a hospital
 > Route for listing all the available treatments under a particular type of treatement
 > Route for fetching all the subtreatments available under a particular treatement which is of a particular type
-
+> Route for getting treatment list in alphabetic order
 
 """
 
@@ -119,3 +120,32 @@ def allSubtreatmentsUnderATreatmentOfAType(hospital_name, type_of_treatment, req
                             to_return[treatmentType][treatment_name] = subTreatmentList
 
     return to_return
+
+
+# Route for getting the treatment list in alphabetic order
+@app.route("/coc/treatments/all")
+def allTreatmentsInOrder():
+    allHospitals = hospital_db.list_collection_names()
+    to_return = {}
+    # Since all hospitals have the same set of treatments
+    reqHosital = [x for x in hospital_db[allHospitals[0]].find()][0]
+    for _, treatmentList in reqHosital["Types of Treatments"].items():
+        for treatment_name in treatmentList.keys():
+            initialLetter = treatment_name[0].upper()
+            if initialLetter not in to_return.keys():
+                to_return[initialLetter] = []
+            to_return[initialLetter].append(treatment_name)
+
+    return to_return
+
+
+"""
+Route: /cms
+===========
+> Route for registering users
+> Route for collecting EHR templates from openEHR
+> Route for downloading patient profile 
+
+
+
+"""
