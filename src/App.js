@@ -1,7 +1,7 @@
 import NavBar from './components/NavBar';
 import About from './components/About';
 import Profile from './components/Profile';
-import SearchBar from './components/SearchBar';
+import HomePage from './components/HomePage';
 import { useState } from 'react';
 import {
   BrowserRouter as Router,
@@ -40,7 +40,7 @@ function App() {
         <Routes>
           <Route exact path="/about" element={<About curStyle={curStyle} />} />
           <Route exact path="/profile" element={<Profile curStyle={curStyle} />} />
-          <Route exact path="/" element={<SearchBar curStyle={curStyle} />} />
+          <Route exact path="/" element={<HomePage curStyle={curStyle} />} />
         </Routes>
       </Router>
 

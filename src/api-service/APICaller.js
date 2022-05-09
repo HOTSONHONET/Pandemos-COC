@@ -1,11 +1,19 @@
 export default class APICaller {
     static AllTreatments() {
-        let res = fetch("http://localhost:5000/coc/treatments/all", {
+        return fetch("/coc/treatments/all", {
             'method': 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
-        }).then(resp => resp.json())
-        return res;
+        })
+    }
+
+    static AllSubTreatments(treatment_name) {
+        return fetch(`/coc/treatments/all/${treatment_name}`, {
+            'method': 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
     }
 };
