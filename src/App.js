@@ -15,6 +15,7 @@ function App() {
   const [curStyle, setCurStyle] = useState({
     color: "black",
     backgroundColor: "white",
+    mode: "light",
   });
 
   const toggleDarkMode = () => {
@@ -23,13 +24,13 @@ function App() {
     if (!darkMode) {
       setCurStyle({
         color: "white",
-        // backgroundColor: "black",
-        // border: "2px solid white"
+        mode: "dark"
       })
     } else {
       setCurStyle({
         color: "black",
         backgroundColor: "white",
+        mode: "light"
       })
     }
   };

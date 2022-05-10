@@ -63,9 +63,7 @@ def top3Hospital(treatment_name: str, budget: int):
             for _, treatment_list in types_of_treatment.items():
                 for subtreatment_name, subtreatment_list in treatment_list.items():
                     for subsubtreatment_name, subsubtreatment_cost in subtreatment_list.items():
-                        print(subsubtreatment_name)
                         if subsubtreatment_name == treatment_name and subsubtreatment_cost <= budget:
-                            print(subsubtreatment_name, subsubtreatment_cost)
                             top3.append((subsubtreatment_cost, hospital))
 
     # Selecting top3 hospitals
@@ -92,17 +90,17 @@ def allTreatments(hospital_name):
     return jsonify(to_return)
 
 
-# Route for fetching all the treatments available a particular type of treaments
-@app.route("/coc/treatments/<string:hospital_name>/<string:type_of_treatment>")
-def allTreatmentsOfAType(hospital_name, type_of_treatment):
-    allHospitals = hospital_db.list_collection_names()
-    to_return = {}
-    if hospital_name in allHospitals:
-        for reqHospital in hospital_db[hospital_name].find():
-            for treatmentType, treatmentList in reqHospital["Types of Treatments"].items():
-                if treatmentType == type_of_treatment:
-                    to_return[treatmentType] = list(treatmentList.keys())
-    return jsonify(to_return)
+# # Route for fetching all the treatments available a particular type of treaments
+# @app.route("/coc/treatments/<string:hospital_name>/<string:type_of_treatment>")
+# def allTreatmentsOfAType(hospital_name, type_of_treatment):
+#     allHospitals = hospital_db.list_collection_names()
+#     to_return = {}
+#     if hospital_name in allHospitals:
+#         for reqHospital in hospital_db[hospital_name].find():
+#             for treatmentType, treatmentList in reqHospital["Types of Treatments"].items():
+#                 if treatmentType == type_of_treatment:
+#                     to_return[treatmentType] = list(treatmentList.keys())
+#     return jsonify(to_return)
 
 
 # Route for fetching all the subtreatments available under a particular treatment which is of a particular type
@@ -138,15 +136,17 @@ def allTreatmentsInOrder():
 
 # Route for getting the subtreatment list of a particular treatment
 @app.route("/coc/treatments/all/<string:treatment_name>")
-def allSubTreatments(treatment_name):
-    allHospitals = hospital_db.list_collection_names()
+def allSubTreatments(treatment_name=""):
     to_return = []
-    # Since all hospitals have the same set of treatments
-    reqHosital = [x for x in hospital_db[allHospitals[0]].find()][0]
-    for _, treatmentList in reqHosital["Types of Treatments"].items():
-        for treatment_name_ in treatmentList.keys():
-            if treatment_name == treatment_name_:
-                to_return = list(treatmentList[treatment_name].keys())
+    print("*"*10, treatment_name, "*"*10)
+    if treatment_name != "":
+        # Since all hospitals have the same set of treatments
+        allHospitals = hospital_db.list_collection_names()
+        reqHosital = [x for x in hospital_db[allHospitals[0]].find()][0]
+        for _, treatmentList in reqHosital["Types of Treatments"].items():
+            for treatment_name_ in treatmentList.keys():
+                if treatment_name == treatment_name_:
+                    to_return = list(treatmentList[treatment_name].keys())
 
     return jsonify(to_return)
 
@@ -155,13 +155,33 @@ def allSubTreatments(treatment_name):
 @app.route("/coc/hos-info")
 def getShortInfoOfHSP():
     allHospitals = hospital_db.list_collection_names()
-    to_return = {}
+    to_return = []
 
     for hospital in allHospitals:
         reqHospital = [x for x in hospital_db[hospital].find()][0]
-        to_return[hospital] = reqHospital['Location']
+        to_return.append({
+            "Name": hospital,
+            "Region": reqHospital['Location']["Region"],
+            "State": reqHospital['Location']["State"]
+        })
 
-    return to_return
+    return jsonify(to_return)
+
+
+# Fetching all subTreaments and their cost under a particular hospital
+@app.route("/coc/treatments/<string:hospital_name>/<string:treatment_name>")
+def getCostOfTreatments(hospital_name, treatment_name):
+    to_return = []
+    reqHospital = [x for x in hospital_db[hospital_name].find()][0]
+    for _, treatmentList in reqHospital["Types of Treatments"].items():
+        for treatment_name_ in treatmentList.keys():
+            if treatment_name == treatment_name_:
+                for k, v in treatmentList[treatment_name].items():
+                    to_return.append({
+                        "name": k,
+                        "cost": v
+                    })
+    return jsonify(to_return)
 
 
 """

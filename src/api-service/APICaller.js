@@ -16,4 +16,33 @@ export default class APICaller {
             }
         })
     }
+
+
+    static HosInfo() {
+        return fetch(`/coc/hos-info`, {
+            'method': 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
+
+    static Top3Hospitals(subTreatment_name, budget) {
+        return fetch(`/coc/${subTreatment_name}/${budget}`, {
+            'method': "GET",
+            headers: {
+                'Content-Type': "application/json"
+            }
+        })
+    }
+
+    static AllSubTreatmentCost(hospital_name, treatment_name) {
+        return fetch(`/coc/treatments/${hospital_name}/${treatment_name}`, {
+            'method': 'GET',
+            header: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }
 };
