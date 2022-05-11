@@ -12,7 +12,6 @@ function HomePage(props) {
     const [buttonState, updateButtonState] = useState(null);
     const [budget, update_budget] = useState(0);
     const [hos_info, update_hos_info] = useState([])
-    const [per_hos_info, update_per_hos_info] = useState([])
     const [top3Hospitals, updateTop3Hospitals] = useState([])
 
     useEffect(() => {
@@ -66,7 +65,7 @@ function HomePage(props) {
             ...base,
             // kill the white space on first and last option
             padding: 0,
-            background: props.curStyle.mode === "dark" ? selectMenuColor.darkBg : selectMenuColor.lightBg,
+            backgroundColor: props.curStyle.mode === "dark" ? selectMenuColor.darkBg : selectMenuColor.lightBg,
             color: selectMenuColor.darkFont,
         })
     };
@@ -74,9 +73,7 @@ function HomePage(props) {
 
     const coc_dash = (event) => {
         update_budget(event.target.value);
-        updateButtonState(null);
         console.log(treatment_name, subTreatment_name, budget);
-
     }
 
     // To fix: the submenu is show for the previously selected item
@@ -94,44 +91,66 @@ function HomePage(props) {
 
     // Heler function to check whether the object is empty or not
     const isEmptyObj = (obj) => {
-        let len = 0;
-        for (let o in obj) {
-            len++;
+        console.log("Size of the object: ", Object.keys(obj).length);
+        return Object.keys(obj).length === 0;
+    }
+
+    // This will monitor top3Hospitals list and once it gets updated only then only we will get AllSubTreatment costs
+    useEffect(() => {
+        if (top3Hospitals.length > 0 && buttonState) {
+            let trans_info = {}
+            console.log("Top3Hospitals: ", top3Hospitals);
+            top3Hospitals.forEach((hos) => {
+                console.log("hos:", hos.name);
+                let hos_name = hos.name;
+                APICaller.AllSubTreatmentCost(hos.name, treatment_name).then(res => res.json().then(data => {
+                    console.log("data recieved from API: ", data);
+                    data.forEach(ele => {
+                        let t_name = ele.name;
+                        let cost = ele.cost;
+                        if (t_name in trans_info) {
+                            trans_info[t_name].push({
+                                "name": hos_name,
+                                "cost": cost
+                            })
+                        } else {
+                            trans_info[t_name] = [{
+                                "name": hos_name,
+                                "cost": cost
+                            }]
+                        }
+                    })
+                })).catch(error => {
+                    console.log("[ERROR] : ", error)
+                })
+            })
+            update_hos_info(trans_info);
+
         }
 
-        return len === 0;
-    }
+    }, [top3Hospitals])
+
 
     const openDashboard = () => {
         console.log(subTreatment_name, budget, "openDashboard");
-        APICaller.Top3Hospitals(subTreatment_name, budget).then(res => res.json().then(data => {
-            updateTop3Hospitals(data);
-            console.log(top3Hospitals);
-            console.log(isEmptyObj(top3Hospitals));
+        setTimeout(APICaller.Top3Hospitals(subTreatment_name, budget).then(res => res.json().then(data => {
+            console.log("top3 hospital data: ", data);
+            console.log("top3Hospital is empty:", isEmptyObj(top3Hospitals));
+
             if (isEmptyObj(data)) {
                 alert("The current budget will not be sufficed even for the minimum treatment cost");
-                updateTop3Hospitals([]);
+                updateButtonState(null);
+            } else {
+                updateTop3Hospitals(data);
+                updateButtonState(true)
             }
+
+
         })).catch(error => {
             console.log(`[Error] ${error}`)
-        })
-
-        let hospital_info_collection = [];
-        for (let hos in top3Hospitals) {
-            console.log(hos);
-            APICaller.AllSubTreatmentCost(hos, treatment_name).then(res => res.json().then(data => {
-                update_per_hos_info(data);
-                hospital_info_collection.push({
-                    'Hospital_name': hos,
-                    'data': per_hos_info,
-                })
-            })).catch(error => {
-                console.log("[ERROR] : ", error)
-            })
-        }
-        console.log("hospital_info_collection: ", hospital_info_collection)
-        update_hos_info(hospital_info_collection);
+        }), 2000)
         updateButtonState(true);
+
     }
     return (<>
         <div className="container mt-5 mb-5" style={props.curStyle}>
@@ -150,7 +169,7 @@ function HomePage(props) {
                     </>
                     : <></>}
             </div>
-            {buttonState && <Dashboard hos_info={hos_info} treatment_name={treatment_name} subtreatment_name={subTreatment_name} budget={budget} curStyle={props.curStyle} />}
+            {buttonState && <Dashboard hos_info={hos_info} treatment_name={treatment_name} subtreatment_name={subTreatment_name} budget={budget} top3Hospitals={top3Hospitals} curStyle={props.curStyle} />}
             {/* <HospitalStats curStyle={props.curStyle} /> */}
         </div>
 

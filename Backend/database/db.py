@@ -14,10 +14,10 @@ db_client = pymongo.MongoClient("mongodb://localhost:27017")
 def getDBObjects():
     # Making a DB object to create/get Hospital Collections
     hospital_db = db_client["Hospitals"]
-    # Making a DB object to create/get Users Collections
-    users_db = db_client["Users"]
 
-    return hospital_db, users_db
+    # Creating a database
+    pandemos_db = db_client["Pandemos"]
+    return hospital_db, pandemos_db
 
 
 # Helper function to push data of Hospitals as record in Hospital Collection

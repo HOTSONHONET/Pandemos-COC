@@ -1,15 +1,17 @@
-from flask import redirect, current_app as app, request, jsonify
+from flask import redirect, current_app as app, request, jsonify, session
 from .config import *
 from database.db import getDBObjects
 from pprint import pprint
 import string
+from passlib.hash import pbkdf2_sha256
+import uuid
 
 # Configs
 app.secret_key = SECRET_KEY
 
 
 # DB Objects
-hospital_db, users_db = getDBObjects()
+hospital_db, pandemos_db = getDBObjects()
 
 
 """
@@ -59,20 +61,27 @@ def top3Hospital(treatment_name: str, budget: int):
     for hospital in allHospitals:
         current_hospital = hospital_db[hospital]
         for x in current_hospital.find():
+            location = x["Location"]
             types_of_treatment = x["Types of Treatments"]
             for _, treatment_list in types_of_treatment.items():
                 for subtreatment_name, subtreatment_list in treatment_list.items():
                     for subsubtreatment_name, subsubtreatment_cost in subtreatment_list.items():
                         if subsubtreatment_name == treatment_name and subsubtreatment_cost <= budget:
-                            top3.append((subsubtreatment_cost, hospital))
+                            top3.append(
+                                (subsubtreatment_cost, hospital, location))
 
+    pprint(f"[INFO] Top3Hospitals : {top3}")
     # Selecting top3 hospitals
-    top3Hospitals = {}
+    top3Hospitals = []
     hospitals = sorted(top3)
     if len(hospitals) >= 3:
         for i in range(3):
-            hospital_cost, hospital_name = hospitals[i]
-            top3Hospitals[hospital_name] = hospital_cost
+            hospital_cost, hospital_name, location = hospitals[i]
+            top3Hospitals.append({
+                "name": hospital_name,
+                "location": location,
+                "cost": hospital_cost
+            })
 
     return jsonify(top3Hospitals)
 
@@ -194,3 +203,21 @@ Route: /cms
 
 
 """
+
+
+@app.route("/cms/register", method=["POST"])
+def register_user():
+    print(request.form)
+
+    # Creating the user object
+    user = {
+        "_id": uuid.uuid4.hex,
+        "name": request.form.get("name"),
+        "email": request.form.get("email"),
+        "password": request.form.get("password"),
+        "state": request.form.get("state"),
+        "region": request.form.get("region")
+    }
+
+    # Encrypting the password
+    user["password"] = pbkdf2_sha256.encrypt(user["password"])
