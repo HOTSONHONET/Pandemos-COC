@@ -45,4 +45,8 @@ export default class APICaller {
             }
         })
     }
+
+    // static Register(name, email, password, state, gender){
+    //     return fetch('/')
+    // }
 };

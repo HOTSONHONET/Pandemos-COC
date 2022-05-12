@@ -8,39 +8,29 @@ function Dashboard(props) {
     let budget = props.budget;
     let treatment_name = props.treatment_name;
     let subtreatment_name = props.subtreatment_name;
-    let data = props.hos_info;
-    let top3Hospitals = props.top3Hospitals;
+    let data = props.top3HospitalsData;
+
     console.log("*******", "Inside Dashboard", "*******")
     console.log("budget : ", budget)
     console.log("treatment_name : ", treatment_name)
     console.log("subtreatment_name: ", subtreatment_name)
-    console.log("Data : ", data)
+    console.log("data: ", data)
+    let top3Hospitals = data["top 3 hospitals"]["hospitals"];
+    let dashboard_data = data["top 3 hospitals"]["compare_data"]
+    console.log("dashboard_data : ", dashboard_data)
     console.log("Top3Hospitals: ", top3Hospitals)
-
-    let dashboard_data = [];
-    console.log("Length of data: ", Object.keys(data).length)
-    if (Object.keys(data).length > 0) {
-        Object.keys(data).forEach(ele => {
-            dashboard_data.push({
-                name: ele,
-                val: data[ele]
-            })
-        })
-
-        console.log("dashboard_data: ", dashboard_data)
-    }
 
     return (
         <>
             <br></br>
-            <div className="container mt-4" styles={props.curStyle}>
+            <div className="container mt-4">
                 <h2>Dashboard</h2>
                 <div className='row' key="hospital-cards">
                     <em className="mt-2 mb-2">Top 3 Hospitals </em>
                     {top3Hospitals.map(ele => {
                         return (<>
                             <div className='col-md' key={ele.name} >
-                                <HosCard hosInfo={ele} curStyle={props.curStyle} />
+                                <HosCard data={ele} />
                             </div>
                         </>)
                     })}
@@ -52,7 +42,7 @@ function Dashboard(props) {
                             console.log("ele: ", ele);
                             return (
                                 <div className="col-6">
-                                    <BarChart data={ele.val} name={ele.name} />
+                                    <BarChart data={ele.data} name={ele.treatment_name} />
                                 </div>)
                         })}
                     </div>

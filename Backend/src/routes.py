@@ -58,29 +58,65 @@ def top3Hospital(treatment_name: str, budget: int):
     allHospitals = hospital_db.list_collection_names()
     top3 = []
     print(treatment_name)
+    main_treatment = ""
+    type_of_treament = ""
     for hospital in allHospitals:
         current_hospital = hospital_db[hospital]
         for x in current_hospital.find():
             location = x["Location"]
+            image_url = str(x["image_url"])
             types_of_treatment = x["Types of Treatments"]
-            for _, treatment_list in types_of_treatment.items():
+            for type_name, treatment_list in types_of_treatment.items():
                 for subtreatment_name, subtreatment_list in treatment_list.items():
                     for subsubtreatment_name, subsubtreatment_cost in subtreatment_list.items():
                         if subsubtreatment_name == treatment_name and subsubtreatment_cost <= budget:
                             top3.append(
-                                (subsubtreatment_cost, hospital, location))
+                                (subsubtreatment_cost, hospital, location, image_url))
+                            main_treatment = subtreatment_name
+                            type_of_treament = type_name
 
-    pprint(f"[INFO] Top3Hospitals : {top3}")
-    # Selecting top3 hospitals
-    top3Hospitals = []
-    hospitals = sorted(top3)
-    if len(hospitals) >= 3:
-        for i in range(3):
-            hospital_cost, hospital_name, location = hospitals[i]
-            top3Hospitals.append({
+    top3Hospitals = {}
+    if len(top3) >= 3:
+        pprint(f"[INFO] Top3Hospitals : {top3}")
+        # Selecting top3 hospitals
+        top3Hospitals = {"top 3 hospitals": {
+            "hospitals": [],
+            "compare_data": []
+        }}
+        top3hospitals_partial_data = sorted(top3)[:3]
+        req_hospitals = []
+        for hospital_data in top3hospitals_partial_data:
+            cost, hospital_name, location, image_url = hospital_data
+            top3Hospitals["top 3 hospitals"]["hospitals"].append({
                 "name": hospital_name,
-                "location": location,
-                "cost": hospital_cost
+                "location": f"{location['Region']}, {location['State']}",
+                "cost": cost,
+                "image_url": image_url
+            })
+            req_hospitals.append(hospital_name)
+
+        mapper = {}
+        for hospital in req_hospitals:
+            current_hospital = [x for x in hospital_db[hospital].find()][0]
+            pprint(current_hospital["Types of Treatments"][type_of_treament])
+            methods = current_hospital["Types of Treatments"][type_of_treament][main_treatment]
+
+            for method, cost in methods.items():
+                if method not in mapper.keys():
+                    mapper[method] = [{
+                        "name": hospital,
+                        "cost": cost
+                    }]
+                else:
+                    mapper[method].append({
+                        "name": hospital,
+                        "cost": cost
+                    })
+
+        for treatment_name, data in mapper.items():
+            top3Hospitals["top 3 hospitals"]["compare_data"].append({
+                "treatment_name": treatment_name,
+                "data": data
             })
 
     return jsonify(top3Hospitals)
@@ -197,27 +233,72 @@ def getCostOfTreatments(hospital_name, treatment_name):
 Route: /cms
 ===========
 > Route for registering users
-> Route for collecting EHR templates from openEHR
-> Route for downloading patient profile 
-
-
+> Route for Login
+> Route for profile management 
+> Route for signing out user
 
 """
 
 
-@app.route("/cms/register", method=["POST"])
-def register_user():
-    print(request.form)
+# Helper function to manage session
+class SessionManager:
+    def start_session(self, user):
+        # So that we will only return _id, name, email, state, region
+        del user["password"]
+        session["logged_in"] = True
+        session["user"] = user
+        return jsonify(user), 200
 
+    def signOut(self):
+        session.clear()
+
+
+@app.route("/cms/register", methods=["POST"])
+def register_user():
+    print(f"request.form: {request.form}")
+    print(f"List of Collections: ")
+    print(pandemos_db.list_collection_names())
     # Creating the user object
     user = {
-        "_id": uuid.uuid4.hex,
+        "_id": uuid.uuid4().hex,
         "name": request.form.get("name"),
         "email": request.form.get("email"),
         "password": request.form.get("password"),
         "state": request.form.get("state"),
-        "region": request.form.get("region")
+        "gender": request.form.get("gender"),
+        "address": request.form.get("address")
+
     }
 
     # Encrypting the password
     user["password"] = pbkdf2_sha256.encrypt(user["password"])
+
+    pprint(user)
+
+    # Checking for existing email address
+    if pandemos_db["Users"].find_one({"email": user["email"]}):
+        print(pandemos_db["Users"].find_one({"email": user["email"]}))
+        return jsonify({"error": "Email address already in use"}), 400
+
+    # Inserting new user to the Users collections
+    if pandemos_db["Users"].insert_one(user):
+        return SessionManager().start_session(user)
+
+    return jsonify({"error": "Signup failed"}), 400
+
+
+@app.route("/cms/signout")
+def signout():
+    return SessionManager().signOut()
+
+
+# Route for login
+@app.route("/cmc/login", methods=["POST"])
+def login():
+    user = pandemos_db["Users"].find_one({
+        "email": request.form.get("email")
+    })
+
+    if user and pbkdf2_sha256.verify(request.form.get("password"), user["password"]):
+        return SessionManager().start_session(user)
+    return jsonify({"error": "Invalid login credentials"}), 401
