@@ -42,7 +42,7 @@ function Dashboard(props) {
                             console.log("ele: ", ele);
                             return (
                                 <div className="col-6">
-                                    <BarChart data={ele.data} name={ele.treatment_name} />
+                                    <BarChart data={ele.data} name={ele.treatment_name} key={ele.treatment_name} />
                                 </div>)
                         })}
                     </div>

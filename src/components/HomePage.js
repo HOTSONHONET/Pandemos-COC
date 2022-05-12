@@ -88,21 +88,49 @@ function HomePage(props) {
         return Object.keys(obj).length === 0;
     }
 
+    //Partial Working
+    // useEffect(() => {
+    //     if (buttonClicked) {
+    //         async function fetchData() {
+    //             await APICaller.Top3Hospitals(subTreatment_name, budget).then(res => res.json().then(data => {
+    // if (isEmptyObj(data)) {
+    //     alert("Please increase your budget to see the Top 3 hospitals");
+    // } else {
+    //     updateTop3HospitalsData(data);
+    //     console.log("Top3Hospitals : ", data);
+    // }
+    //             })).catch(error => {
+    //                 console.log("[ERROR] : ", error)
+    //             })
+    //         }
+    //         fetchData()
+    //     }
+    // }, [buttonClicked])
+
+
+    // I think it is working fine
     useEffect(() => {
         if (buttonClicked) {
             async function fetchData() {
-                await APICaller.Top3Hospitals(subTreatment_name, budget).then(res => res.json().then(data => {
-                    if (isEmptyObj(data)) {
-                        alert("Please increase your budget to see the Top 3 hospitals");
-                    } else {
-                        updateTop3HospitalsData(data);
-                        console.log("Top3Hospitals : ", data);
-                    }
-                })).catch(error => {
-                    console.log("[ERROR] : ", error)
-                })
+                const response = await APICaller.Top3Hospitals(subTreatment_name, budget)
+                console.log(response);
+                if (!response.ok) {
+                    throw new Error(`An error has occured: ${response.status}`)
+                }
+
+                const data = await response.json();
+                return data;
             }
-            fetchData()
+            fetchData().then(data => {
+                if (isEmptyObj(data)) {
+                    alert("Please increase your budget to see the Top 3 hospitals");
+                } else {
+                    updateTop3HospitalsData(data);
+                    console.log("Top3Hospitals : ", data);
+                }
+            }).catch(error => {
+                console.log("[ERROR] : ", error)
+            })
         }
     }, [buttonClicked])
 
