@@ -30,7 +30,7 @@ function Dashboard(props) {
                     {top3Hospitals.map(ele => {
                         return (<>
                             <div className='col-md' key={ele.name} >
-                                <HosCard data={ele} />
+                                <HosCard data={ele} curStyle={props.curStyle} />
                             </div>
                         </>)
                     })}

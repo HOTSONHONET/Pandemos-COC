@@ -161,8 +161,8 @@ function COCPage(props) {
                             treatment_name={treatment_name}
                             subtreatment_name={subTreatment_name}
                             budget={budget}
-                            top3HospitalsData={top3HospitalsData} c
-                            urStyle={props.curStyle}
+                            top3HospitalsData={top3HospitalsData}
+                            curStyle={props.curStyle}
                         />}
                     </>
                     : <></>}
