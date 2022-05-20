@@ -59,4 +59,6 @@ Once a patient registers to the platform, they will have the opportunity to crea
   </tr>
  </table>
 
+## Working of COC dashboard
+![pandemos_coc_working](https://user-images.githubusercontent.com/56304060/169537715-dcda95ad-bf31-40b2-b9b6-f1d20ab23fbc.gif)
 
