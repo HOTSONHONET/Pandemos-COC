@@ -37,7 +37,7 @@ function HomePage() {
                                 <h5 className="card-title"><center>{ele.name}</center></h5>
                             </div>
                             <ul className="list-group list-group-flush">
-                                <li className="list-group-item">{ele.location}</li>
+                                <li className="list-group-item"><center>{ele.location}</center></li>
                                 <li className="list-group-item"></li>
                             </ul>
                         </div>
