@@ -1,75 +1,35 @@
-# Pandemos-COC
-Pandemos is a tool for patients all over India (hopefully in future it will be available to all people) to make effective decisions while choosing a hospital for treatment
+# Pandemos Telemedicine: A Cost-of-Care Consultant
+
+## Overview
+Pandemos, is a telemedicine platform that will be deployed as a web application to help patients schedule virtual appointments in their trusted hospitals. The platform will provide a patient-friendly cost-of-care dashboard, where patients can get better cost estimates for medical procedures from nearby hospitals. The users can compare hospitals based on the ratings & previous patients’ experiences to get a better idea about the hospital services. The dashboard is a modern analytical tool to monitor hospital Key Performance Indicators (KPI) dynamically and interactively. It can interpret machine-readable data to provide meaningful insights in the form of visual representations. Comparative analysis between hospitals based on the ratings, previous patient experiences, and treatment facilities helps users make a wise selection of their hospital. 
+Once a patient registers to the platform, they will have the opportunity to create or share their Electronic Health Records (EHRs). EHRs can be leveraged and scaled to improve clinical care and health decisions. The application will incorporate a consultant management system which will assist in providing appointments with the physicians for a virtual consultation. It will also handle the sharing of EHR with an appointed physician while ensuring data democratization. Virtual consultation can be the required multi-prolonged solution to help patients, primarily symptomatic patients, communicate with physicians without physical presence.
 
 
+## Challenges 🗡
+- The cost-of-care associated with various healthcare providers is less understood in mixed health systems like India
+- Out of Pocket Expenditure (OOPE) per episode of outpatient care in public and private providers do not provide a fair comparison
+- Clinical Data is generally available in machine-readable format (XML and CSV), but these formats can't be used by a patient who is comparing the prices
+- Covid-19 has showed that a multipronged approach is the need of the hour that can prevent long term health consequences
 
-# Getting Started with Create React App
+## Solution 📃
+- Dashboard can interpret machine readable data to provide meaningful insights in the form of visual representations
+- Cost-of-Care dashboard can deliver comparative analysis between healthcare service providers (HSPs), and improve patient decision making
+- Electronic health records (EHR) can be leveraged and scaled to improve clinical care and health decisions
+- openEHR is a free-to-use EHR standard that reduces the workload of building HIPAA compliant EHR templates
+- Virtual consultation can be the required multi-pronged solution that can help patients, especially symptomatic patient to communicate with physician without the need of physical presence
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## System Requirements
 
-In the project directory, you can run:
+- #### Operating system 💻: Windows 7+, Mac, Linux
+- #### Device requirements 📱: Laptop or Mobile
+- #### Associated software 👩🏼‍💻: Node (v14+), Python (>= 3.8), MongoDB compass
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### User Interaction flow
+![image](https://user-images.githubusercontent.com/56304060/169528750-36d58aa6-c13f-458c-bb74-e440debe957e.png)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+### Screenshots
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
