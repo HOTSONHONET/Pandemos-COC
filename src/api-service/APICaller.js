@@ -46,7 +46,16 @@ export default class APICaller {
         })
     }
 
-    // static Register(name, email, password, state, gender){
-    //     return fetch('/')
-    // }
+    static LoginUser(email, password) {
+        return fetch('/cms/login'), {
+            'method': 'POST',
+            header: {
+                'Content-Type': 'application / json'
+            },
+            body: {
+                "email": email,
+                "password": password
+            }
+        }
+    }
 };

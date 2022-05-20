@@ -1,6 +1,7 @@
 import NavBar from './components/NavBar';
 import About from './components/About';
 import Profile from './components/Profile';
+import COCPage from './components/COCPage';
 import HomePage from './components/HomePage';
 import { useState } from 'react';
 import {
@@ -42,6 +43,7 @@ function App() {
           <Route exact path="/about" element={<About curStyle={curStyle} />} />
           <Route exact path="/profile" element={<Profile curStyle={curStyle} />} />
           <Route exact path="/" element={<HomePage curStyle={curStyle} />} />
+          <Route exact path="/dashboard" element={<COCPage curStyle={curStyle} />} />
         </Routes>
       </Router>
 

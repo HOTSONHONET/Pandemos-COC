@@ -1,6 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function Register(props) {
+    const [hide, updateHide] = useState(true);
+    const performRegistration = (event) => {
+        event.preventDefault();
+        const to_send = {};
+        const data = new FormData(event.target);
+        data["name"] = data.get("name");
+        data["email"] = data.get("email");
+        data["password"] = data.get("password");
+        data["gender"] = data.get("gender");
+        data["address"] = data.get("address");
+        data["contact_number"] = data.get("cnumber")
+
+        console.log(data);
+    }
     return (
         <div className="container mt-3">
             <center><h2>Register</h2></center>
@@ -57,8 +71,9 @@ function Register(props) {
                                 {/* Password */}
                                 <div className="form-group mb-3">
                                     <label className="form-label" htmlFor="password">Password</label>
-                                    <input type="password" id="form3Example4" name="password" className="form-control form-control-lg"
+                                    <input type={hide ? "password" : "text"} id="form3Example4" name="password" className="form-control form-control-lg"
                                         placeholder="Enter password" />
+                                    <input type="checkbox" onClick={() => { updateHide(!hide) }} />Show password
                                 </div>
 
                                 {/* button */}

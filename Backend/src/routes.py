@@ -205,9 +205,9 @@ def getShortInfoOfHSP():
     for hospital in allHospitals:
         reqHospital = [x for x in hospital_db[hospital].find()][0]
         to_return.append({
-            "Name": hospital,
-            "Region": reqHospital['Location']["Region"],
-            "State": reqHospital['Location']["State"]
+            "name": hospital,
+            "location": f"{reqHospital['Location']['Region']}, {reqHospital['Location']['State']}",
+            "image_url": reqHospital['image_url']
         })
 
     return jsonify(to_return)
