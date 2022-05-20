@@ -30,6 +30,33 @@ Once a patient registers to the platform, they will have the opportunity to crea
 ![image](https://user-images.githubusercontent.com/56304060/169528750-36d58aa6-c13f-458c-bb74-e440debe957e.png)
 
 
+
 ### Screenshots
+<table>
+  <tr>
+    <td>Homepage</td>
+     <td>Homepage (dark mode)</td>
+  </tr>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/56304060/169533859-2b71dc53-df14-4106-896b-1274b7c12ee4.png" width=500 height=200></td>
+    <td><img src="https://user-images.githubusercontent.com/56304060/169533393-754637ba-6d89-44b6-9980-2155ba835386.png" width=500 height=200></td>
+  </tr>
+  <tr>
+    <td>About</td>
+     <td>About (dark mode)</td>
+  </tr>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/56304060/169534077-c63d9050-7b20-41e2-b44b-972f0e9ef665.png" width=500 height=200></td>
+    <td><img src="https://user-images.githubusercontent.com/56304060/169534088-4aa682c6-fee2-4bcc-b6d9-046a2ab05c41.png" width=500 height=200></td>
+  </tr>
+  <tr>
+    <td>Dashboard</td>
+    <td>Dashboard(dark mode)</td>     
+  </tr>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/56304060/169534999-6bc87e1b-5591-4a09-b044-10150d75e6d6.png" width=500 height=200></td>
+    <td><img src="https://user-images.githubusercontent.com/56304060/169535010-2b8eb335-1ef8-4ec0-8148-0e8085f892d0.png" width=500 height=200></td>    
+  </tr>
+ </table>
 
 
